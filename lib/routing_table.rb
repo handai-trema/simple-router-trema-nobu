@@ -28,7 +28,7 @@ class RoutingTable
      MAX_NETMASK_LENGTH.downto(0).each do |each|
        @db[each].each_key{|eachkey|
          ipaddr=IPAddr.new(eachkey,Socket::AF_INET)
-         tempstr+= ipaddr.to_s+"/"+each.to_s+"\t:"+@db[each][eachkey].to_s+"\n" if each.to_s != "0"
+         tempstr+= ipaddr.to_s+"/"+each.to_s+"\t:"+@db[each][eachkey].to_s+"\n"
        }
     end
     return tempstr
