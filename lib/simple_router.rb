@@ -13,7 +13,25 @@ class SimpleRouter < Trema::Controller
     @unresolved_packet_queue = Hash.new { [] }
     logger.info "#{name} started."
   end
-
+  def show_table_entries()
+    return @routing_table.showTableEntries
+  end  
+  def add_routing_entry(nexthost,mask,nexthop)
+     nexthost=IPv4Address.new(nexthost)
+     nexthop =IPv4Address.new(nexthop)
+     @routing_table.add({netmask_length:mask.to_i,destination:nexthost,next_hop:nexthop})
+  end
+  def del_routing_entry(nexthost,mask)
+    return @routing_table.delRoutingEntry(nexthost,mask)
+  end
+  def show_interfaces()
+    temptext="MACアドレス\tIPアドレス\tネットマスク長\tポート番号\n"
+    Interface.all.each{|each|
+      temptext+=each.mac_address.to_s+"\t"+each.ip_address.to_s+"\t"+each.netmask_length.to_s+"\t"+each.port_number.to_s+"\n"
+    }
+    return temptext
+  end
+ 
   def switch_ready(dpid)
     send_flow_mod_delete(dpid, match: Match.new)
   end
@@ -34,8 +52,7 @@ class SimpleRouter < Trema::Controller
     end
   end
   # rubocop:enable MethodLength
-
-  # rubocop:disable MethodLength
+ # rubocop:disable MethodLength
   def packet_in_arp_request(dpid, in_port, arp_request)
     interface =
       Interface.find_by(port_number: in_port,

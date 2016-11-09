@@ -23,4 +23,21 @@ class RoutingTable
     end
     nil
   end
+  def showTableEntries()
+    tempstr="対象宛先ホスト\t:次の経路\n"
+     MAX_NETMASK_LENGTH.downto(0).each do |each|
+       @db[each].each_key{|eachkey|
+         ipaddr=IPAddr.new(eachkey,Socket::AF_INET)
+         tempstr+= ipaddr.to_s+"/"+each.to_s+"\t:"+@db[each][eachkey].to_s+"\n" if each.to_s != "0"
+       }
+    end
+    return tempstr
+  end
+
+  def delRoutingEntry(nexthost,mask)
+    prefix = IPv4Address.new(nexthost).mask(mask).to_i
+    @db[mask.to_i].delete(prefix)
+  end
+
+
 end

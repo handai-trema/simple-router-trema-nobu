@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler'
+Bundler.setup :default
+
+require 'gli'
+require 'trema'
+
+# simple_router command
+module SimpleRouterApp
+  extend GLI::App
+ 
+  desc 'Show routing table'
+  arg_name ''
+  command :show_rtable do |c|
+    c.desc 'Location to find socket files'
+    c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+    c.action do |_global_options, options, args|
+      result=Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.
+        show_table_entries()
+      print(result)
+      end
+  end
+
+  desc 'Add routing entry'
+  arg_name 'nexthost,netmask,nexthop'
+  command :add do |c|
+    c.desc 'Add new routing entry'
+    c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+    c.action do |_global_options, options, args|
+      result=Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.
+        add_routing_entry(args[0],args[1],args[2])
+      print result.to_s
+    end
+  end
+
+  desc 'delete routing entry'
+  arg_name 'nexthost,netmask'
+  command :del do |c|
+    c.desc 'Delete added routing entry by prefix of a destination address'
+    c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+    c.action do |_global_options, options, args|
+      Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.
+        del_routing_entry(args[0],args[1])
+    end
+  end
+
+  desc 'show interfaces'
+  arg_name ''
+  command :show_iface do |c|
+    c.desc 'show all interfaces'
+    c.flag [:S, :socket_dir], default_value: Trema::DEFAULT_SOCKET_DIR
+    c.action do |_global_options, options, args|
+      result =  Trema.trema_process('SimpleRouter', options[:socket_dir]).controller.
+        show_interfaces
+     print result
+    end
+  end
+
+  exit run(ARGV)
+end
