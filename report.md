@@ -1,12 +1,10 @@
 # 課題内容
 ルータのCLIをつくる。具体的には以下のコマンドを追加する。
 ## ルーティングテーブルの表示
-ルーティングテーブルを一覧表示するコマンド
 ## ルーティングテーブルエントリの追加と削除
-ルーティングテーブルエントリの追加・削除を行うコマンド
 ## ルータのインタフェース一覧の表示
 
-# 回答
+# 解答
 ## プログラムファイルの説明
 今回改良・作成したプログラムは大きく分けて３つのプログラムにわかれている。
 まず、
@@ -198,7 +196,8 @@ ensyuu2@ensyuu2-VirtualBox:~/simple-router-trema-nobu$ ./bin/simple_router show_
 ## ルータのインタフェース一覧の表示
 
 ```
-ensyuu2@ensyuu2-VirtualBox:~/simple-router-trema-nobu$ ./bin/simple_router show_ifaceMACアドレス	IPアドレス	ネットマスク長	ポート番号
+ensyuu2@ensyuu2-VirtualBox:~/simple-router-trema-nobu$ ./bin/simple_router show_iface
+MACアドレス	IPアドレス	ネットマスク長	ポート番号
 01:01:01:01:01:01	192.168.1.1	24	1
 02:02:02:02:02:02	192.168.2.1	24	2
 ```
